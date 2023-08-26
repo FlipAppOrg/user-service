@@ -1,0 +1,29 @@
+{
+    "name": "user-service-app",
+    "version": "1.0.0",
+    "description": "An application to manage credit card offers, user authentication, and profiles.",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js",
+      "dev": "nodemon app.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://your-repository-url.git"
+    },
+    "author": "Rishi Sharma",
+    "license": "MIT",
+    "dependencies": {
+      "bcryptjs": "^2.4.3",
+      "express": "^4.17.1",
+      "jsonwebtoken": "^8.5.1",
+      "pg": "^8.6.0",
+      "pg-hstore": "^2.3.3",
+      "sequelize": "^6.6.2",
+      "speakeasy": "^2.0.0"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.7"
+    }
+  }
+  
