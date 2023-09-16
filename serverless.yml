@@ -21,7 +21,7 @@ functions:
     handler: server.handler
     events:
       - http: ANY /
-      - http: 'ANY {proxy+}'
+      - http: 'ANY /{proxy+}'
     environment:
       ENV: ${env:ENV}
       DB_USER: ${env:PG_DB_USERNAME}
