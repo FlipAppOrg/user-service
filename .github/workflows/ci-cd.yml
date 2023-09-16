@@ -1,37 +1,83 @@
 name: CI/CD Pipeline
 
-on:
+on: 
   push:
     branches:
-      - masterl
+        - dev # You can use any of your root or master branch name
+        - main
 
 jobs:
-  build_and_test:
+  lambda-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout to repo
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
+      - name: Setup node environment
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
-
-      - name: Install dependencies
+          node-version: '18.x'
+          
+      - uses: Teakowa/setup-serverless@v2
+        with:
+          serverless_version: 3.9.0
+          provider: aws
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY}}
+      
+      - name: Install npm dependencies
         run: npm install
+     
+      - name: Deploy lambda function
+        env: 
+          ENV: ${{ vars.ENV }}
+          PG_DB_USERNAME: ${{ secrets.PG_DB_USERNAME }}
+          PG_DB_PASSWORD: ${{ secrets.PG_DB_PASSWORD }}
+          PG_DB_ENDPOINT: ${{ vars.PG_DB_ENDPOINT }}
+          PG_DB_PORT: ${{ vars.PG_DB_PORT }}
+          PG_DB: ${{ vars.PG_DB }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          LOG_FORMAT: dev
+          LOG_DIR: ../logs
+          ORIGIN: '*'
+          CREDENTIALS: ${{ vars.CREDENTIALS }}
+          TWILIO_SID: ${{ vars.TWILIO_SID }}
+          TWILIO_AUTH: ${{ vars.TWILIO_AUTH }}
+        run: sls deploy
+# on:
+#   push:
+#     branches:
+#       - masterl
 
-      - name: Run tests
-        run: npm test
+# jobs:
+#   build_and_test:
+#     runs-on: ubuntu-latest
 
-  docker_build:
-    needs: build_and_test
-    runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#       - name: Use Node.js 16
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '16'
 
-      - name: Build Docker image
-        run: |
-          docker build -t your_image_name .
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run tests
+#         run: npm test
+
+#   docker_build:
+#     needs: build_and_test
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Build Docker image
+#         run: |
+#           docker build -t your_image_name .
