@@ -1,7 +1,4 @@
 service: user-service
-# app and org for use with dashboard.serverless.com
-app: flipcard-app
-org: flipcard
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
