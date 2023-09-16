@@ -32,6 +32,8 @@ jobs:
      
       - name: Deploy lambda function
         env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           ENV: ${{ vars.ENV }}
           PG_DB_USERNAME: ${{ secrets.PG_DB_USERNAME }}
           PG_DB_PASSWORD: ${{ secrets.PG_DB_PASSWORD }}
@@ -45,7 +47,7 @@ jobs:
           CREDENTIALS: ${{ vars.CREDENTIALS }}
           TWILIO_SID: ${{ vars.TWILIO_SID }}
           TWILIO_AUTH: ${{ vars.TWILIO_AUTH }}
-        run: sls deploy
+        run: sls deploy --stage ${{ vars.ENV }}
 # on:
 #   push:
 #     branches:
