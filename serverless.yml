@@ -15,35 +15,6 @@ provider:
   timeout: 120
 # you can overwrite defaults here
   stage: dev
-# you can add statements to the Lambda function's IAM Role here
-#  iam:
-#    role:
-#      statements:
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:ListBucket"
-#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:PutObject"
-#          Resource:
-#            Fn::Join:
-#              - ""
-#              - - "arn:aws:s3:::"
-#                - "Ref" : "ServerlessDeploymentBucket"
-#                - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  patterns:
-#    - '!exclude-me.js'
-#    - '!exclude-me-dir/**'
-#    - include-me.js
-#    - include-me-dir/**
 
 functions:
   user-service:
@@ -51,20 +22,20 @@ functions:
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
-     environment:
-        ENV: ${env:ENV}
-        DB_USER: ${env:PG_DB_USERNAME}
-        DB_PASSWORD: ${env:PG_DB_PASSWORD}
-        DB_HOST: ${env:PG_DB_ENDPOINT}
-        DB_PORT: ${env:PG_DB_PORT}
-        DB_DATABASE: ${env:PG_DB}
-        SECRET_KEY: ${env:SECRET_KEY}
-        LOG_FORMAT: dev
-        LOG_DIR: ../logs
-        ORIGIN: '*'
-        CREDENTIALS: ${env:CREDENTIALS}
-        TWILIO_SID: ${env:TWILIO_SID}
-        TWILIO_AUTH: ${env:TWILIO_AUTH}
+    environment:
+      ENV: ${env:ENV}
+      DB_USER: ${env:PG_DB_USERNAME}
+      DB_PASSWORD: ${env:PG_DB_PASSWORD}
+      DB_HOST: ${env:PG_DB_ENDPOINT}
+      DB_PORT: ${env:PG_DB_PORT}
+      DB_DATABASE: ${env:PG_DB}
+      SECRET_KEY: ${env:SECRET_KEY}
+      LOG_FORMAT: dev
+      LOG_DIR: ../logs
+      ORIGIN: '*'
+      CREDENTIALS: ${env:CREDENTIALS}
+      TWILIO_SID: ${env:TWILIO_SID}
+      TWILIO_AUTH: ${env:TWILIO_AUTH}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
