@@ -35,7 +35,7 @@
       "@utils/*": ["utils/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env", "signup/src/user-registration/user.registration.service.ts"],
+  "include": ["src/**/*.ts", "src/**/*.json", ".env", "signup/src/user-registration/user.registration.service.ts", "server.ts"],
   "exclude": ["node_modules", "src/http", "src/logs"]
   
 }
