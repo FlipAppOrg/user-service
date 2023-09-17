@@ -4,7 +4,6 @@ import UserRouter from './routes/users.route';
 import { ValidateEnv } from './utils/validateEnv';
 import { NODE_ENV, PORT } from './config';
 import  express from 'express';
-import serverless from "serverless-http";
 
 ValidateEnv();
 const env = NODE_ENV || 'development';
@@ -17,4 +16,4 @@ try {
 } catch (e) {
   console.log(e);
 }
-exports.handler = serverless(app);
+export default app;
