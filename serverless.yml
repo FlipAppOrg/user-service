@@ -15,7 +15,7 @@ provider:
 
 functions:
   user-service:
-    handler: handler.handler
+    handler: handler.main
     events:
       - http: ANY /
       - http: 'ANY /{proxy+}'
