@@ -45,7 +45,7 @@ jobs:
           CREDENTIALS: ${{ vars.CREDENTIALS }}
           TWILIO_SID: ${{ vars.TWILIO_SID }}
           TWILIO_AUTH: ${{ vars.TWILIO_AUTH }}
-        run: sls deploy --stage ${{ vars.ENV }}
+        run: serverless deploy --stage ${{ vars.ENV }}
 # on:
 #   push:
 #     branches:
