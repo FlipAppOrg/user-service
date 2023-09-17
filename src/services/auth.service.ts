@@ -124,7 +124,7 @@ export async function sendOtpSMS(userData: User): Promise<string> {
   const TWILIO_SID = process.env.TWILIO_SID;
   const TWILIO_AUTH = process.env.TWILIO_AUTH;
   const otp = generateOTP();
-  if (process.env.ENV === 'test'){
+  if (process.env.ENV != 'prod'){
     console.log('**********  testing the otp **************8 : ' + otp);
     return otp; 
   } else {
