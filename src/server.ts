@@ -1,8 +1,8 @@
-import initializeApp, { listenApp } from './src/app';
-import AuthRouter from './src/routes/auth.route';
-import UserRouter from './src/routes/users.route';
-import { ValidateEnv } from './src/utils/validateEnv';
-import { NODE_ENV, PORT } from './src/config';
+import initializeApp, { listenApp } from './app';
+import AuthRouter from './routes/auth.route';
+import UserRouter from './routes/users.route';
+import { ValidateEnv } from './utils/validateEnv';
+import { NODE_ENV, PORT } from './config';
 import  express from 'express';
 import serverless from "serverless-http";
 
@@ -17,4 +17,4 @@ try {
 } catch (e) {
   console.log(e);
 }
-module.exports.handler = serverless(app);
+exports.handler = serverless(app);
