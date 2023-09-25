@@ -6,8 +6,35 @@ on:
         - dev # You can use any of your root or master branch name
 
 jobs:
+  init:
+    name: "init"
+    runs-on: "ubuntu-latest"
+    outputs:
+      environment_output: ${{ steps.set_environment.outputs.environment_output }}
+
+    steps:
+      - name: "set environment"
+        id: set_environment
+        run: |
+          if [[ "${{github.base_ref}}" == "main" || "${{github.ref}}" == "refs/heads/main" ]]; then
+            echo "environment_output=prod" >> $GITHUB_OUTPUT
+          fi
+          if [[ "${{github.base_ref}}" == "dev" || "${{github.ref}}" == "refs/heads/dev" ]]; then
+            echo "environment_output=dev" >> $GITHUB_OUTPUT
+          fi
+
+
+      - name: "verfiy environment"
+        id: verifyvars
+        run: |
+          echo "ENVIRONMENT_OUTPUT= $environment_output" 
   build-container:
     runs-on: ubuntu-latest
+    environment: ${{ needs.init.outputs.environment_output }}
+    needs:
+      - init
+    outputs:
+      environment_output: ${{ needs.init.outputs.environment_output }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
