@@ -4,11 +4,11 @@
  *  production mode :: pm2 start ecosystem.config.js --only prod
  *  development mode :: pm2 start ecosystem.config.js --only dev
  */
- module.exports = {
+module.exports = {
   apps: [
     {
       name: 'prod', // pm2 start App name
-      script: 'dist/server.ts',
+      script: 'dist/server.js',
       exec_mode: 'cluster', // 'cluster' or 'fork'
       instance_var: 'INSTANCE_ID', // instance variable
       instances: 2, // pm2 instance count

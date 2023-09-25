@@ -1,15 +1,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2017",
     "lib": ["es2017", "esnext.asynciterable"],
     "typeRoots": ["node_modules/@types"],
-    "strict": true,
-    "preserveConstEnums": true,
-    "noEmit": true,
-    "sourceMap": false,
-    "skipLibCheck": true,
-    "isolatedModules": true, 
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -17,9 +11,11 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "pretty": true,
+    "sourceMap": true,
     "declaration": true,
     "outDir": "dist",
     "allowJs": true,
+    "noEmit": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
@@ -39,7 +35,7 @@
       "@utils/*": ["utils/*"]
     }
   },
-  "include": ["src/app.ts", "src/**/*.ts", "src/**/*.json", ".env", "signup/src/user-registration/user.registration.service.ts", "src/server.ts", "handler.ts"],
+  "include": ["src/**/*.ts", "src/**/*.json", ".env", "signup/src/user-registration/user.registration.service.ts"],
   "exclude": ["node_modules", "src/http", "src/logs"]
   
 }

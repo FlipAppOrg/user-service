@@ -7,45 +7,101 @@ on:
         - main
 
 jobs:
-  lambda-deploy:
+  build-container:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout to repo
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Setup node environment
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
-          
-      - name: Install dependencies
-        run: npm install -g serverless
+          node-version: 18
 
-      - name: Configure serverless authentication
-        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY }} --secret ${{ secrets.AWS_SECRET_KEY }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push to Elastic Container Registry
+        id: build-image
+        uses: docker/build-push-action@v4
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
+          IMAGE_TAG: ${{ github.run_number }}
+        with:
+          context: .
+          push: true
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:nft-marketplace-backend_${{env.IMAGE_TAG}}
+          secrets: |
+            POSTGRESQL_USER_NAME=${{ secrets.POSTGRESQL_USER_NAME }}
+            POSTGRESQL_USER_PASSWORD=${{ secrets.POSTGRESQL_USER_PASSWORD }}
+            POLYTRADE_PRIVATE_KEY=${{ secrets.POLYTRADE_PRIVATE_KEY }}
+            WALLET_KEY=${{ secrets.WALLET_KEY }}
+            ADMIN_WALLET_KEY=${{ secrets.ADMIN_WALLET_KEY }}
+            AMAZON_EMAIL_SECRET_ACCESS_KEY=${{ secrets.AMAZON_EMAIL_SECRET_ACCESS_KEY }}
+            AMAZON_EMAIL_ACCESS_KEY_ID=${{ secrets.AMAZON_EMAIL_ACCESS_KEY_ID }}
+          build-args: |
+            ENV=${{ vars.ENV }}
+            APPLICATION_NAME=${{ vars.APPLICATION_NAME }}
+            PORT=${{ vars.PORT }}
+            SERVER=${{ vars.SERVER }}
+            POLYTRADE_PUBLIC_KEY=${{ vars.POLYTRADE_PUBLIC_KEY }}
+            MATIC_RPC_URL=${{ vars.MATIC_RPC_URL }}
+            LOG_FOLDER=${{ vars.LOG_FOLDER }}
+            POSTGRESQL_HOST=${{ vars.POSTGRESQL_HOST }}
+            POSTGRESQL_PORT=${{ vars.POSTGRESQL_PORT }}
+            POSTGRESQL_DATABASE_NAME=${{ vars.POSTGRESQL_DATABASE_NAME }}
+            AMAZON_EMAIL_REGION=${{ vars.AWS_REGION }}
+            AMAZON_FILE_BUCKET=${{ vars.AMAZON_FILE_BUCKET }}
+
+
+  # lambda-deploy:
+  #   runs-on: ubuntu-latest
+    
+  #   steps:
+  #     - name: Checkout to repo
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup node environment
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '18.x'
+          
+  #     - name: Install dependencies
+  #       run: npm install -g serverless
+
+  #     - name: Configure serverless authentication
+  #       run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY }} --secret ${{ secrets.AWS_SECRET_KEY }}
       
-      - name: Install npm dependencies
-        run: npm install
+  #     - name: Install npm dependencies
+  #       run: npm install
      
-      - name: Deploy lambda function
-        env: 
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          ENV: ${{ vars.ENV }}
-          PG_DB_USERNAME: ${{ secrets.PG_DB_USERNAME }}
-          PG_DB_PASSWORD: ${{ secrets.PG_DB_PASSWORD }}
-          PG_DB_ENDPOINT: ${{ vars.PG_DB_ENDPOINT }}
-          PG_DB_PORT: ${{ vars.PG_DB_PORT }}
-          PG_DB: ${{ vars.PG_DB }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          LOG_FORMAT: dev
-          LOG_DIR: ../logs
-          ORIGIN: '*'
-          CREDENTIALS: ${{ vars.CREDENTIALS }}
-          TWILIO_SID: ${{ vars.TWILIO_SID }}
-          TWILIO_AUTH: ${{ vars.TWILIO_AUTH }}
-        run: serverless deploy --stage ${{ vars.ENV }}
+  #     - name: Deploy lambda function
+  #       env: 
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  #         ENV: ${{ vars.ENV }}
+  #         PG_DB_USERNAME: ${{ secrets.PG_DB_USERNAME }}
+  #         PG_DB_PASSWORD: ${{ secrets.PG_DB_PASSWORD }}
+  #         PG_DB_ENDPOINT: ${{ vars.PG_DB_ENDPOINT }}
+  #         PG_DB_PORT: ${{ vars.PG_DB_PORT }}
+  #         PG_DB: ${{ vars.PG_DB }}
+  #         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  #         LOG_FORMAT: dev
+  #         LOG_DIR: ../logs
+  #         ORIGIN: '*'
+  #         CREDENTIALS: ${{ vars.CREDENTIALS }}
+  #         TWILIO_SID: ${{ vars.TWILIO_SID }}
+  #         TWILIO_AUTH: ${{ vars.TWILIO_AUTH }}
+  #       run: serverless deploy --stage ${{ vars.ENV }}
 # on:
 #   push:
 #     branches:
