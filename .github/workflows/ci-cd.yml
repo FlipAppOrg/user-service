@@ -21,8 +21,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: us-east-2
 
       - name: Login to Amazon ECR
@@ -41,26 +41,22 @@ jobs:
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:nft-marketplace-backend_${{env.IMAGE_TAG}}
           secrets: |
-            POSTGRESQL_USER_NAME=${{ secrets.POSTGRESQL_USER_NAME }}
-            POSTGRESQL_USER_PASSWORD=${{ secrets.POSTGRESQL_USER_PASSWORD }}
-            POLYTRADE_PRIVATE_KEY=${{ secrets.POLYTRADE_PRIVATE_KEY }}
-            WALLET_KEY=${{ secrets.WALLET_KEY }}
-            ADMIN_WALLET_KEY=${{ secrets.ADMIN_WALLET_KEY }}
-            AMAZON_EMAIL_SECRET_ACCESS_KEY=${{ secrets.AMAZON_EMAIL_SECRET_ACCESS_KEY }}
-            AMAZON_EMAIL_ACCESS_KEY_ID=${{ secrets.AMAZON_EMAIL_ACCESS_KEY_ID }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            TWILIO_SID=${{ secrets.TWILIO_SID }}
+            TWILIO_AUTH=${{ secrets.TWILIO_AUTH }}
           build-args: |
             ENV=${{ vars.ENV }}
             APPLICATION_NAME=${{ vars.APPLICATION_NAME }}
             PORT=${{ vars.PORT }}
-            SERVER=${{ vars.SERVER }}
-            POLYTRADE_PUBLIC_KEY=${{ vars.POLYTRADE_PUBLIC_KEY }}
-            MATIC_RPC_URL=${{ vars.MATIC_RPC_URL }}
-            LOG_FOLDER=${{ vars.LOG_FOLDER }}
-            POSTGRESQL_HOST=${{ vars.POSTGRESQL_HOST }}
-            POSTGRESQL_PORT=${{ vars.POSTGRESQL_PORT }}
-            POSTGRESQL_DATABASE_NAME=${{ vars.POSTGRESQL_DATABASE_NAME }}
-            AMAZON_EMAIL_REGION=${{ vars.AWS_REGION }}
-            AMAZON_FILE_BUCKET=${{ vars.AMAZON_FILE_BUCKET }}
+            LOG_DIR=${{ vars.LOG_DIR }}
+            DB_HOST=${{ vars.DB_HOST }}
+            DB_PORT=${{ vars.DB_PORT }}
+            DB_DATABASE=${{ vars.DB_DATABASE }}
+            ORIGIN=${{ vars.ORIGIN }}
+            CREDENTIALS=${{ vars.CREDENTIALS }}
+        
 
 
   # lambda-deploy:
