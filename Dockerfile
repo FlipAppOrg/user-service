@@ -1,5 +1,4 @@
-FROM node:18.16.0-alpine AS node
-FROM alpine:3.17
+FROM node:18
 
 ARG ENV
 ARG APPLICATION_NAME
