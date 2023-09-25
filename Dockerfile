@@ -1,8 +1,5 @@
 FROM alpine:3.17
 
-ENV NODE_VERSION 18.18.0
-
-
 ARG ENV
 ARG APPLICATION_NAME
 ARG PORT
@@ -19,7 +16,8 @@ ARG TWILIO_SID
 ARG TWILIO_AUTH
 
 
-ENV ENV $ENV \
+ENV NODE_VERSION 18.18.0 \
+    ENV $ENV \
     APPLICATION_NAME $APPLICATION_NAME \
     PORT $PORT \
     LOG_DIR $LOG_DIR \
@@ -49,5 +47,5 @@ RUN npm install
 # RUN npm ci --omit=dev
 # Bundle app source
 
-EXPOSE 3000
+EXPOSE $PORT
 CMD [ "npm", "run", "dev" ]
