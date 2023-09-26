@@ -28,6 +28,7 @@ jobs:
         id: verifyvars
         run: |
           echo "ENVIRONMENT_OUTPUT= $environment_output" 
+          
   build-container:
     runs-on: ubuntu-latest
     environment: ${{ needs.init.outputs.environment_output }}
